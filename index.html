@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>กำหนดการพิธี</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Swiper.js for image slider -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Google Fonts (Kanit) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f7fafc;
+        }
+        /* Style for the timeline line on desktop */
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background-color: #cbd5e0;
+            border-radius: 2px;
+        }
+
+        /* Style for the timeline line on mobile */
+        @media (max-width: 768px) {
+            .timeline-container::before {
+                left: 2.5rem; /* Corresponds to w-10 in Tailwind */
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Swiper styles */
+        .swiper {
+            width: 100%;
+            aspect-ratio: 16 / 9; /* Enforce a 16:9 horizontal aspect ratio */
+            border-radius: 0.5rem;
+            background-color: #e2e8f0; /* Add a background color for when images are loading */
+        }
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .swiper-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto px-4 py-12">
+        <h1 class="text-4xl font-bold text-center mb-4 text-gray-900">กำหนดการ</h1>
+        <p class="text-center text-gray-600 mb-12">ขั้นตอนและกิจกรรมภายในงาน</p>
+
+        <!-- Timeline Container -->
+        <div class="relative timeline-container p-4">
+
+            <!-- Timeline Item 1: Registration -->
+            <div class="relative md:flex md:items-center md:justify-start mb-12">
+                <!-- Mobile Time Circle -->
+                <div class="md:hidden absolute top-0 left-0 flex items-center justify-center w-20 h-20 bg-gray-700 rounded-full z-10 -ml-10">
+                    <h3 class="text-white font-bold text-lg">8.00</h3>
+                </div>
+                <!-- Content: Adjusted padding for better responsive layout -->
+                <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-8">
+                     <div class="bg-white rounded-lg shadow-xl px-6 py-4">
+                        <h3 class="font-bold text-gray-800 text-xl">ลงทะเบียนเข้าร่วมงาน</h3>
+                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">รับเอกสารและของที่ระลึกหน้างาน</p>
+                        <div class="swiper swiper1">
+                            <div class="swiper-wrapper">
+                                <!-- Updated image paths to local files -->
+                                <div class="swiper-slide"><img src="./images/registration-1.png" alt="ภาพโต๊ะลงทะเบียน 1"></div>
+                                <div class="swiper-slide"><img src="./images/registration-2.jpg" alt="ภาพโต๊ะลงทะเบียน 2"></div>
+                                <div class="swiper-slide"><img src="./images/registration-3.jpg" alt="ภาพโต๊ะลงทะเบียน 3"></div>
+                            </div>
+                            <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Desktop Time Circle -->
+                <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24 bg-gray-700 rounded-full z-10">
+                     <h3 class="text-white font-bold text-xl">8.00</h3>
+                </div>
+                <div class="md:w-1/2"></div>
+            </div>
+
+            <!-- Timeline Item 2: Pay Respects -->
+            <div class="relative md:flex md:items-center md:justify-end mb-12">
+                 <!-- Mobile Time Circle -->
+                <div class="md:hidden absolute top-0 left-0 flex items-center justify-center w-20 h-20 bg-gray-700 rounded-full z-10 -ml-10">
+                    <h3 class="text-white font-bold text-lg">8.15</h3>
+                </div>
+                <div class="md:w-1/2"></div>
+                <!-- Content: Adjusted padding for better responsive layout -->
+                <div class="w-full md:w-1/2 pl-12 md:pl-8">
+                     <div class="bg-white rounded-lg shadow-xl px-6 py-4">
+                        <h3 class="font-bold text-gray-800 text-xl">ไหว้อาจารย์ใหญ่</h3>
+                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">พิธีแสดงความเคารพและรำลึกถึงพระคุณ</p>
+                        <div class="swiper swiper2">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide"><img src="./images/respect-1.jpg" alt="ภาพพิธีไหว้อาจารย์ใหญ่ 1"></div>
+                                <div class="swiper-slide"><img src="./images/respect-2.jpg" alt="ภาพผู้เข้าร่วมพิธี 2"></div>
+                            </div>
+                            <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Desktop Time Circle -->
+                <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24 bg-gray-700 rounded-full z-10">
+                     <h3 class="text-white font-bold text-xl">8.15</h3>
+                </div>
+            </div>
+
+            <!-- Timeline Item 3: Monk Ceremony -->
+             <div class="relative md:flex md:items-center md:justify-start mb-12">
+                <!-- Mobile Time Circle -->
+                <div class="md:hidden absolute top-0 left-0 flex items-center justify-center w-20 h-20 bg-gray-700 rounded-full z-10 -ml-10">
+                    <h3 class="text-white font-bold text-lg">10.00</h3>
+                </div>
+                <!-- Content: Adjusted padding for better responsive layout -->
+                <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-8">
+                     <div class="bg-white rounded-lg shadow-xl px-6 py-4">
+                        <h3 class="font-bold text-gray-800 text-xl">พิธีสงฆ์</h3>
+                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">ประกอบพิธีทางศาสนาเพื่อความเป็นสิริมงคล</p>
+                        <div class="swiper swiper3">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide"><img src="./images/monk-ceremony-1.jpg" alt="ภาพพิธีสงฆ์ 1"></div>
+                                <div class="swiper-slide"><img src="./images/monk-ceremony-2.jpg" alt="ภาพพระสงฆ์ 2"></div>
+                                <div class="swiper-slide"><img src="./images/monk-ceremony-3.jpg" alt="ภาพประธานในพิธี 3"></div>
+                            </div>
+                            <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Desktop Time Circle -->
+                <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24 bg-gray-700 rounded-full z-10">
+                     <h3 class="text-white font-bold text-xl">10.00</h3>
+                </div>
+                <div class="md:w-1/2"></div>
+            </div>
+
+            <!-- Timeline Item 4: Lunch Offering -->
+            <div class="relative md:flex md:items-center md:justify-end mb-12">
+                 <!-- Mobile Time Circle -->
+                <div class="md:hidden absolute top-0 left-0 flex items-center justify-center w-20 h-20 bg-gray-700 rounded-full z-10 -ml-10">
+                    <h3 class="text-white font-bold text-lg">11.00</h3>
+                </div>
+                <div class="md:w-1/2"></div>
+                <!-- Content: Adjusted padding for better responsive layout -->
+                <div class="w-full md:w-1/2 pl-12 md:pl-8">
+                     <div class="bg-white rounded-lg shadow-xl px-6 py-4">
+                        <h3 class="font-bold text-gray-800 text-xl">ถวายภัตตาหารเพล</h3>
+                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">ร่วมกันถวายภัตตาหารเพลแด่พระภิกษุสงฆ์</p>
+                        <div class="swiper swiper4">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide"><img src="./images/lunch-offering-1.jpg" alt="ภาพถวายภัตตาหาร 1"></div>
+                                <div class="swiper-slide"><img src="./images/lunch-offering-2.jpg" alt="ภาพอาหาร 2"></div>
+                            </div>
+                            <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Desktop Time Circle -->
+                <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24 bg-gray-700 rounded-full z-10">
+                     <h3 class="text-white font-bold text-xl">11.00</h3>
+                </div>
+            </div>
+
+            <!-- Timeline Item 5: End of Ceremony -->
+            <div class="relative md:flex md:items-center md:justify-start">
+                <!-- Mobile Time Circle -->
+                <div class="md:hidden absolute top-0 left-0 flex items-center justify-center w-20 h-20 bg-green-600 rounded-full z-10 -ml-10">
+                    <h3 class="text-white font-bold text-lg">12.00</h3>
+                </div>
+                <!-- Content: Adjusted padding for better responsive layout -->
+                <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-8">
+                     <div class="bg-green-100 rounded-lg shadow-xl px-6 py-4">
+                        <h3 class="font-bold text-green-800 text-xl">เสร็จพิธี</h3>
+                        <p class="text-sm leading-snug tracking-wide text-green-700">เสร็จสิ้นพิธีการทั้งหมด ขอเชิญรับประทานอาหารกลางวัน</p>
+                    </div>
+                </div>
+                <!-- Desktop Time Circle -->
+                <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24 bg-green-600 rounded-full z-10">
+                     <h3 class="text-white font-bold text-xl">12.00</h3>
+                </div>
+                <div class="md:w-1/2"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Initialize all Swiper instances
+        const swipers = [
+            new Swiper('.swiper1', { loop: true, pagination: { el: '.swiper-pagination', clickable: true }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } }),
+            new Swiper('.swiper2', { loop: true, pagination: { el: '.swiper-pagination', clickable: true }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } }),
+            new Swiper('.swiper3', { loop: true, pagination: { el: '.swiper-pagination', clickable: true }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } }),
+            new Swiper('.swiper4', { loop: true, pagination: { el: '.swiper-pagination', clickable: true }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } }),
+        ];
+    </script>
+
+</body>
+</html>
