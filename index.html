@@ -6,7 +6,7 @@
     <title>กำหนดการพิธี</title>
     
     <!-- Tailwind CSS for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./src/output.css" rel="stylesheet">
     
     <!-- Swiper.js for image slider -->
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
@@ -369,16 +369,6 @@
                 }
             };
 
-            // Initialize Modal Swiper
-            modalSwiper = new Swiper('.modal-swiper', {
-                loop: true,
-                on: {
-                    slideChange: updateCaption,
-                },
-                pagination: { el: '.modal-pagination', clickable: true },
-                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-            });
-
             // --- Modal Open/Close Functions ---
             const openModal = () => {
                 imageModal.classList.remove('opacity-0', 'pointer-events-none');
@@ -406,10 +396,24 @@
                     const clickedIndex = Array.from(parentSwiperWrapper.children).indexOf(slide.closest('.swiper-slide'));
 
                     // Populate modal swiper
-                    modalSwiperWrapper.innerHTML = slidesData.map(data => `<div class="swiper-slide"><img src="${data.src}" alt="${data.alt}"></div>`).join('');
+                    modalSwiperWrapper.innerHTML = slidesData.map(data => `<div class="swiper-slide"><img src="${data.src}" alt="${data.alt || ''}"></div>`).join('');
                     
-                    modalSwiper.update(); // Update swiper with new slides
-                    modalSwiper.slideToLoop(clickedIndex, 0, false); // Go to the clicked slide without animation
+                    // Initialize the swiper on first click, or update it on subsequent clicks.
+                    // This prevents the "loop" warning on page load.
+                    if (!modalSwiper) {
+                        modalSwiper = new Swiper('.modal-swiper', {
+                            loop: true,
+                            on: {
+                                slideChange: updateCaption,
+                            },
+                            pagination: { el: '.modal-pagination', clickable: true },
+                            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                        });
+                    }
+                    
+                    // Update the swiper instance with the new slides and go to the correct one.
+                    modalSwiper.update();
+                    modalSwiper.slideToLoop(clickedIndex, 0, false);
                     updateCaption(modalSwiper); // Set initial caption
                     openModal();
                 });
