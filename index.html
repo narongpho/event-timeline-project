@@ -69,9 +69,21 @@
         /* Adjust Swiper width on mobile */
         @media (max-width: 768px) {
             .swiper {
-                width: 90%; /* Adjust as needed */
+                width: 100%; /* Adjust as needed */
                 margin: 0 auto; /* Center the swiper */
             }
+        }
+
+        /* Modal Swiper styles */
+        .modal-swiper .swiper-slide img {
+            object-fit: contain; /* Show the whole image in the modal */
+        }
+        .modal-pagination .swiper-pagination-bullet {
+            background-color: white;
+            opacity: 0.7;
+        }
+        .modal-pagination .swiper-pagination-bullet-active {
+            opacity: 1;
         }
     </style>
 </head>
@@ -94,13 +106,13 @@
                 <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-8">
                      <div class="bg-white rounded-lg shadow-xl px-6 py-4">
                         <h3 class="font-bold text-gray-800 text-xl">ลงทะเบียนเข้าร่วมงาน</h3>
-                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">นำ qrcode ไปลงทะเบียนเข้าร่วมงาน</p>
-                        <div class="swiper swiper1">
+                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">นำ Qrcode ที่ได้รับจากหนังสือเชิญ แสดงให้นักศึกษาที่จุดลงทะเบียนเข้าร่วมงาน</p>
+                        <div class="swiper timeline-swiper">
                             <div class="swiper-wrapper">
                                 <!-- Updated image paths to local files -->
-                                <div class="swiper-slide"><img src="./images/registration-1.jpg" alt="ภาพโต๊ะลงทะเบียน 1"></div>
-                                <div class="swiper-slide"><img src="./images/registration-2.jpg" alt="ภาพโต๊ะลงทะเบียน 2"></div>
-                                <div class="swiper-slide"><img src="./images/registration-3.jpg" alt="ภาพโต๊ะลงทะเบียน 3"></div>
+                                <div class="swiper-slide cursor-pointer"><img src="./images/registration-1.jpg" alt="ภาพโต๊ะลงทะเบียน 1"></div>
+                                <div class="swiper-slide cursor-pointer"><img src="./images/registration-2.jpg" alt="ภาพโต๊ะลงทะเบียน 2"></div>
+                                <div class="swiper-slide cursor-pointer"><img src="./images/registration-3.jpg" alt="ภาพโต๊ะลงทะเบียน 3"></div>
                             </div>
                             <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
                         </div>
@@ -124,12 +136,12 @@
                 <div class="w-full md:w-1/2 pl-12 md:pl-8">
                      <div class="bg-white rounded-lg shadow-xl px-6 py-4">
                         <h3 class="font-bold text-gray-800 text-xl">ไหว้อาจารย์ใหญ่</h3>
-                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">พิธีแสดงความเคารพและรำลึกถึงพระคุณ</p>
-                        <div class="swiper swiper2">
+                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">จะมีนักศึกษานำญาติไปที่ห้องเรียนแลปกรอสชั้น 4 เพื่อแสดงความเคารพและรำลึกถึงพระคุณ</p>
+                        <div class="swiper timeline-swiper">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide"><img src="./images/respect1.jpg" alt="ภาพบรรยากาศไหว้อาจารย์ใหญ่ 1"></div>
-                                <div class="swiper-slide"><img src="./images/respect2.jpg" alt="ภาพบรรยากาศไหว้อาจารย์ใหญ่ 2"></div>
-                                <div class="swiper-slide"><img src="./images/respect3.jpg" alt="ภาพบรรยากาศไหว้อาจารย์ใหญ่ 2"></div>
+                                <div class="swiper-slide cursor-pointer"><img src="./images/respect1.jpg" alt="ภาพบรรยากาศไหว้อาจารย์ใหญ่ 1"></div>
+                                <div class="swiper-slide cursor-pointer"><img src="./images/respect2.jpg" alt="ภาพบรรยากาศไหว้อาจารย์ใหญ่ 2"></div>
+                                <div class="swiper-slide cursor-pointer"><img src="./images/respect3.jpg" alt="ภาพบรรยากาศไหว้อาจารย์ใหญ่ 2"></div>
                             </div>
                             <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
                         </div>
@@ -151,12 +163,12 @@
                 <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-8">
                      <div class="bg-white rounded-lg shadow-xl px-6 py-4">
                         <h3 class="font-bold text-gray-800 text-xl">พิธีสงฆ์</h3>
-                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">ประกอบพิธีทางศาสนาเพื่อความเป็นสิริมงคล</p>
-                        <div class="swiper swiper3">
+                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">ประกอบพิธีทางศาสนา ณ ห้องประชุมราชปนัดดาสิรินธร ที่ชั้น 2 และ 3</p>
+                        <div class="swiper timeline-swiper">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide"><img src="./images/monk-ceremony-1.jpg" alt="ภาพพิธีสงฆ์ 1"></div>
-                                <div class="swiper-slide"><img src="./images/monk-ceremony-2.jpg" alt="ภาพพิธีสงฆ์ 2"></div>
-                                <div class="swiper-slide"><img src="./images/monk-ceremony-3.jpg" alt="ภาพพิธีสงฆ์ 3"></div>
+                                <div class="swiper-slide cursor-pointer"><img src="./images/monk-ceremony-1.jpg" alt="ภาพพิธีสงฆ์ 1"></div>
+                                <div class="swiper-slide cursor-pointer"><img src="./images/monk-ceremony-2.jpg" alt="ภาพพิธีสงฆ์ 2"></div>
+                                <div class="swiper-slide cursor-pointer"><img src="./images/monk-ceremony-3.jpg" alt="ภาพพิธีสงฆ์ 3"></div>
                             </div>
                             <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
                         </div>
@@ -180,12 +192,12 @@
                 <div class="w-full md:w-1/2 pl-12 md:pl-8">
                      <div class="bg-white rounded-lg shadow-xl px-6 py-4">
                         <h3 class="font-bold text-gray-800 text-xl">ถวายภัตตาหารเพล</h3>
-                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">ถวายภัตตาหารเพลแด่พระภิกษุสงฆ์</p>
-                        <div class="swiper swiper4">
+                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">ถวายภัตตาหารเพลแด่พระภิกษุสงฆ์ ที่อาคารศรีสวรินทิรา ชั้น 8 (ให้นักศึกษาและญาติรอ)</p>
+                        <div class="swiper timeline-swiper">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide"><img src="./images/lunch-offering-1.jpg" alt="ภาพถวายภัตตาหาร 1"></div>
-                                <div class="swiper-slide"><img src="./images/lunch-offering-2.jpg" alt="ภาพถวายภัตตาหาร 2"></div>
-                                <div class="swiper-slide"><img src="./images/lunch-offering-1.jpg" alt="ภาพถวายภัตตาหาร 3"></div>
+                                <div class="swiper-slide cursor-pointer"><img src="./images/lunch-offering-1.jpg" alt="ภาพถวายภัตตาหาร 1"></div>
+                                <div class="swiper-slide cursor-pointer"><img src="./images/lunch-offering-2.jpg" alt="ภาพถวายภัตตาหาร 2"></div>
+                                <div class="swiper-slide cursor-pointer"><img src="./images/lunch-offering-1.jpg" alt="ภาพถวายภัตตาหาร 3"></div>
                             </div>
                             <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
                         </div>
@@ -220,14 +232,105 @@
         </div>
     </div>
 
+    <!-- Image Viewer Modal -->
+    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out">
+        <div class="relative w-full h-full max-w-4xl max-h-screen p-4 md:p-8">
+            <!-- Close Button -->
+            <button id="closeModalBtn" class="absolute top-4 right-4 md:top-6 md:right-6 w-12 h-12 flex items-center justify-center bg-black/70 rounded-full text-white text-3xl z-50 hover:bg-black/90 transition-colors leading-none">&times;</button>
+
+            <!-- Swiper for Modal -->
+            <div class="swiper modal-swiper w-full h-full">
+                <div class="swiper-wrapper" id="modalSwiperWrapper">
+                    <!-- Slides will be injected here by JavaScript -->
+                </div>
+                <!-- Add Arrows -->
+                <div class="swiper-button-next text-white"></div>
+                <div class="swiper-button-prev text-white"></div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination modal-pagination"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Initialize all Swiper instances
-        const swipers = [
-            new Swiper('.swiper1', { loop: true, pagination: { el: '.swiper-pagination', clickable: true }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } }),
-            new Swiper('.swiper2', { loop: true, pagination: { el: '.swiper-pagination', clickable: true }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } }),
-            new Swiper('.swiper3', { loop: true, pagination: { el: '.swiper-pagination', clickable: true }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } }),
-            new Swiper('.swiper4', { loop: true, pagination: { el: '.swiper-pagination', clickable: true }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } }),
-        ];
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Initialize Timeline Swipers ---
+            // A more efficient way to initialize all timeline swipers
+            document.querySelectorAll('.timeline-swiper').forEach(swiperContainer => {
+                new Swiper(swiperContainer, {
+                    loop: true,
+                    pagination: {
+                        el: swiperContainer.querySelector('.swiper-pagination'),
+                        clickable: true,
+                    },
+                    navigation: {
+                        nextEl: swiperContainer.querySelector('.swiper-button-next'),
+                        prevEl: swiperContainer.querySelector('.swiper-button-prev'),
+                    },
+                });
+            });
+
+            // --- Modal Logic ---
+            const imageModal = document.getElementById('imageModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const modalSwiperWrapper = document.getElementById('modalSwiperWrapper');
+            const body = document.body;
+            let modalSwiper = null;
+
+            // Initialize Modal Swiper
+            modalSwiper = new Swiper('.modal-swiper', {
+                loop: true,
+                pagination: { el: '.modal-pagination', clickable: true },
+                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+            });
+
+            // --- Modal Open/Close Functions ---
+            const openModal = () => {
+                imageModal.classList.remove('opacity-0', 'pointer-events-none');
+                body.classList.add('overflow-hidden'); // Prevent background scroll
+            };
+
+            const closeModal = () => {
+                // Check if modal is already closed to prevent unnecessary actions
+                if (imageModal.classList.contains('pointer-events-none')) {
+                    return;
+                }
+                imageModal.classList.add('opacity-0', 'pointer-events-none');
+                body.classList.remove('overflow-hidden'); // Restore background scroll
+            };
+
+            // Add click listeners to all slides in timeline swipers
+            document.querySelectorAll('.timeline-swiper .swiper-slide').forEach((slide) => {
+                slide.addEventListener('click', () => {
+                    const parentSwiperWrapper = slide.closest('.swiper-wrapper');
+                    const allImages = Array.from(parentSwiperWrapper.querySelectorAll('img'));
+                    const imageSources = allImages.map(img => img.src);
+                    const clickedIndex = Array.from(parentSwiperWrapper.children).indexOf(slide.closest('.swiper-slide'));
+
+                    // Populate modal swiper
+                    modalSwiperWrapper.innerHTML = imageSources.map(src => `<div class="swiper-slide"><img src="${src}" alt="Modal image"></div>`).join('');
+                    
+                    modalSwiper.update(); // Update swiper with new slides
+                    modalSwiper.slideToLoop(clickedIndex, 0, false); // Go to the clicked slide without animation
+                    openModal();
+                });
+            });
+
+            // Close modal functionality
+            closeModalBtn.addEventListener('click', closeModal);
+            imageModal.addEventListener('click', (e) => {
+                if (e.target === imageModal) { // Only close if clicking on the background
+                    closeModal();
+                }
+            });
+
+            // Add keyboard listener for 'Escape' key to close the modal
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+        });
     </script>
 
 </body>
