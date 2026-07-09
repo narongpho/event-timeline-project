@@ -485,7 +485,7 @@
                                     <h3 class="font-bold text-gray-800 text-xl">ถวายเครื่องไทยทาน</h3>
                                 </div>
                             </div>
-                            <p class="text-sm leading-snug tracking-wide text-gray-600">ถวายเครื่องไทยทานแด่พระภิกษุสงฆ์ ณ อาคารศรีสวรินทิรา ชั้น 8 เพื่อความเป็นสิริมงคลแก่ครอบครัว</p>
+                            <p class="text-sm leading-snug tracking-wide text-gray-600">ถวายเครื่องไทยทานแด่พระภิกษุสงฆ์ ณ ห้องประชุมราชปนัดดาสิรินธร ชั้น 1 เพื่อความเป็นสิริมงคลแก่ครอบครัว</p>
                         </div>
                     </div>
                     <div class="hidden md:flex step-ring absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24">
@@ -580,7 +580,7 @@
             positions[i * 3 + 0] = (Math.random() - 0.5) * 30;
             positions[i * 3 + 1] = (Math.random() - 0.5) * RANGE_Y;
             positions[i * 3 + 2] = (Math.random() - 0.5) * 18;
-            speeds[i] = 0.4 + Math.random() * 1.2;
+            speeds[i] = 1.0 + Math.random() * 2.6;
             phases[i] = Math.random() * Math.PI * 2;
             sizes[i] = 6 + Math.random() * 22;
         }
@@ -611,9 +611,9 @@
                 void main() {
                     vPhase = aPhase;
                     vSpeed = aSpeed;
-                    float travel = uTime * aSpeed * 0.6 + uScroll * 4.0;
+                    float travel = uTime * aSpeed * 1.1 + uScroll * 6.0;
                     float y = mod(position.y + travel + uRangeY * 0.5, uRangeY) - uRangeY * 0.5;
-                    float sway = sin(uTime * 0.6 + aPhase) * 0.6;
+                    float sway = sin(uTime * 0.8 + aPhase) * 1.4;
                     vec3 finalPos = vec3(position.x + sway, y, position.z);
                     vec4 mvPosition = modelViewMatrix * vec4(finalPos, 1.0);
                     gl_PointSize = aSize * uPixelRatio * (18.0 / -mvPosition.z);
