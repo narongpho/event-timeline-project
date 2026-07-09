@@ -4,60 +4,228 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>กำหนดการพิธี</title>
-    
+
     <!-- Tailwind CSS for styling -->
     <link href="./src/output.css" rel="stylesheet">
-    
+
     <!-- Swiper.js for image slider -->
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
+    <!-- GSAP + ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- Three.js (ES module) -->
+    <script type="importmap">
+    { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+    </script>
+
     <!-- Google Fonts (Kanit) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Custom styles */
-        body {
-            font-family: 'Kanit', sans-serif;
-            /* Animated Gradient Background */
-            background: linear-gradient(-45deg, #e0c3fc, #8ec5fc, #f0d9e5, #8ec5fc);
-            background-size: 400% 400%;
-            animation: animateGradient 15s ease infinite;
-        }
-        @keyframes animateGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        /* Style for the timeline line on desktop */
-        .timeline-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 100%;
-            background-color: #ffffff;
-            border-radius: 2px;
+        :root {
+            --gold: #d4af37;
+            --gold-bright: #ffe9a8;
+            --gold-deep: #8a6d1d;
+            --ink: #150b06;
+            --ink-2: #241207;
+            --cream: #fdf8ee;
         }
 
-        /* Style for the timeline line on mobile */
+        html { scroll-behavior: smooth; }
+        @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            color: var(--cream);
+            background: radial-gradient(ellipse at 50% -10%, #3a1d0d 0%, var(--ink-2) 45%, var(--ink) 100%);
+            background-size: 160% 160%;
+            background-position: 50% 0%;
+            overflow-x: hidden;
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            body { animation: bgDrift 40s ease-in-out infinite alternate; }
+        }
+        @keyframes bgDrift {
+            0% { background-position: 50% 0%; }
+            100% { background-position: 50% 18%; }
+        }
+
+        /* ---------- WebGL gold particle background ---------- */
+        #goldParticles {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .page-content { position: relative; z-index: 1; }
+
+        /* ---------- Hero ---------- */
+        .hero {
+            position: relative;
+            text-align: center;
+            padding: 4.5rem 1.5rem 2.5rem;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+        .hero-lotus {
+            width: clamp(120px, 30vw, 190px);
+            height: auto;
+            margin: 0 auto 1rem;
+            display: block;
+            color: var(--gold);
+            filter: drop-shadow(0 0 16px rgba(212, 175, 55, .45));
+        }
+        .hero h1 {
+            font-weight: 700;
+            font-size: clamp(2rem, 5vw, 3rem);
+            letter-spacing: .04em;
+            background: linear-gradient(180deg, var(--gold-bright), var(--gold) 60%, var(--gold-deep));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: .6rem;
+        }
+        .hero p { color: #e9d9b8; opacity: .9; }
+
+        .candle-decor {
+            position: absolute;
+            top: .25rem;
+            right: 1rem;
+            width: 42px;
+            height: 84px;
+            pointer-events: none;
+            opacity: .9;
+        }
+        @media (max-width: 640px) {
+            .candle-decor { position: static; margin: 1.25rem auto 0; }
+        }
+        .candle-flame { transform-origin: 50% 100%; }
+        @media (prefers-reduced-motion: no-preference) {
+            .candle-flame { animation: flicker 2.6s ease-in-out infinite; }
+        }
+        @keyframes flicker {
+            0%, 100% { transform: scaleY(1) scaleX(1) rotate(0deg); opacity: 1; }
+            20% { transform: scaleY(1.1) scaleX(.93) rotate(-2deg); opacity: .9; }
+            45% { transform: scaleY(.9) scaleX(1.06) rotate(2deg); opacity: 1; }
+            70% { transform: scaleY(1.05) scaleX(.96) rotate(-1deg); opacity: .94; }
+        }
+        .smoke-wisp {
+            fill: none;
+            stroke: rgba(230, 220, 200, .4);
+            stroke-width: 1.2;
+            stroke-linecap: round;
+            opacity: 0;
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .smoke-wisp { animation: smokeRise 6s ease-in-out infinite; }
+            .smoke-wisp:nth-child(2) { animation-delay: 1.6s; }
+            .smoke-wisp:nth-child(3) { animation-delay: 3.2s; }
+        }
+        @keyframes smokeRise {
+            0% { transform: translateY(8px) scaleX(1); opacity: 0; }
+            15% { opacity: .45; }
+            55% { transform: translateY(-16px) scaleX(1.15); opacity: .3; }
+            100% { transform: translateY(-38px) scaleX(.9); opacity: 0; }
+        }
+
+        /* ---------- Timeline ---------- */
+        .timeline-line-wrap {
+            position: absolute;
+            top: 0;
+            width: 6px;
+            height: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
         @media (max-width: 768px) {
-            .timeline-container::before {
-                left: 2.5rem; /* Corresponds to w-10 in Tailwind */
-                transform: translateX(-50%);
-            }
+            .timeline-line-wrap { left: 2.5rem; }
+        }
+        .timeline-line-wrap svg { width: 100%; height: 100%; overflow: visible; }
+        #timelinePath {
+            fill: none;
+            stroke: url(#goldLineGradient);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+
+        .step-ring {
+            flex-direction: column;
+            border-radius: 9999px;
+            background: radial-gradient(circle at 32% 28%, #4a2e12, #1c0f06 72%);
+            box-shadow: 0 0 0 1px rgba(212, 175, 55, .55), 0 0 22px rgba(212, 175, 55, .35), inset 0 0 12px rgba(0, 0, 0, .5);
+        }
+        .step-ring::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 9999px;
+            border: 1.5px dashed rgba(212, 175, 55, .65);
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .step-ring::before { animation: ringSpin 16s linear infinite; }
+        }
+        @keyframes ringSpin { to { transform: rotate(360deg); } }
+        .ring-numeral { font-weight: 700; line-height: 1; color: var(--gold-bright); text-shadow: 0 0 10px rgba(212, 175, 55, .6); }
+        .ring-time { color: #e9d9b8; opacity: .85; font-weight: 400; letter-spacing: .02em; }
+
+        .timeline-card {
+            background: var(--cream);
+            border: 1px solid rgba(212, 175, 55, .55);
+            box-shadow: 0 10px 30px -8px rgba(0, 0, 0, .55), 0 0 0 1px rgba(255, 255, 255, .4) inset;
+        }
+        .timeline-card--final {
+            background: linear-gradient(160deg, #fdf6e0, #f7ecc9);
+        }
+
+        .step-icon { width: 40px; height: 40px; color: #a97c1f; flex-shrink: 0; }
+        .step-icon .draw-path {
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+        }
+        .hero-lotus .draw-path {
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+        }
+
+        .step-time-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            font-size: .75rem;
+            font-weight: 600;
+            color: #8a6d1d;
+            background: #f7ecc9;
+            border: 1px solid #e3cd8a;
+            border-radius: 9999px;
+            padding: .15rem .65rem;
         }
 
         /* Swiper styles */
         .swiper {
             width: 100%;
-            aspect-ratio: 16 / 9; /* Enforce a 16:9 horizontal aspect ratio */
+            aspect-ratio: 16 / 9;
             border-radius: 0.5rem;
-            background-color: #e2e8f0; /* Add a background color for when images are loading */
+            background-color: #e2e8f0;
         }
         .swiper-slide {
             text-align: center;
@@ -74,17 +242,9 @@
             object-fit: cover;
         }
 
-        /* Adjust Swiper width on mobile */
-        @media (max-width: 768px) {
-            .swiper {
-                width: 100%; /* Adjust as needed */
-                margin: 0 auto; /* Center the swiper */
-            }
-        }
-
         /* Modal Swiper styles */
         .modal-swiper .swiper-slide img {
-            object-fit: contain; /* Show the whole image in the modal */
+            object-fit: contain;
         }
         .modal-pagination .swiper-pagination-bullet {
             background-color: white;
@@ -93,215 +253,278 @@
         .modal-pagination .swiper-pagination-bullet-active {
             opacity: 1;
         }
-
-        /* Floating Shapes Animation */
-        .background-shapes {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0; /* Sits between body background and content */
-        }
-
-        .background-shapes span {
-            position: absolute;
-            display: block;
-            list-style: none;
-            width: 20px;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
-            animation: floatUp 25s linear infinite;
-            bottom: -150px; /* Start from below the screen */
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.2), 0 0 15px rgba(255, 255, 255, 0.1);
-        }
-
-        /* Varying sizes, positions, and animation delays for a random effect */
-        .background-shapes span:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
-        .background-shapes span:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
-        .background-shapes span:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
-        .background-shapes span:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
-        .background-shapes span:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
-        .background-shapes span:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
-        .background-shapes span:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
-        .background-shapes span:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
-        .background-shapes span:nth-child(9) { left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
-        .background-shapes span:nth-child(10) { left: 85%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 11s; }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-                border-radius: 50%;
-            }
-            100% {
-                transform: translateY(-110vh) rotate(720deg); /* Move up the full height and more, and rotate */
-                opacity: 0;
-                border-radius: 25%;
-            }
-        }
     </style>
 </head>
-<body class="text-gray-800">
+<body>
 
-    <!-- Animated background shapes container -->
-    <div class="background-shapes" aria-hidden="true">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
+    <!-- WebGL gold particle background (three.js, custom shader) -->
+    <canvas id="goldParticles" aria-hidden="true"></canvas>
 
-    <div class="container mx-auto px-4 py-12 relative z-10">
-        <h1 class="text-4xl font-bold text-center mb-4 text-gray-900">กำหนดการ</h1>
-        <p class="text-center text-gray-700 mb-12">และขั้นตอนการเข้าร่วมงานทำบุญอาจารย์ใหญ่ ประจำปี 2568</p>
+    <div class="page-content">
 
-        <!-- Timeline Container -->
-        <div class="relative timeline-container p-4">
+        <!-- Hero -->
+        <section class="hero">
+            <svg class="hero-lotus" viewBox="0 0 200 160" aria-hidden="true">
+                <path class="draw-path" pathLength="100" d="M100 150 C100 150 60 120 60 85 C60 60 80 50 100 80" />
+                <path class="draw-path" pathLength="100" d="M100 150 C100 150 140 120 140 85 C140 60 120 50 100 80" />
+                <path class="draw-path" pathLength="100" d="M100 150 C100 150 75 112 85 76 C92 56 100 62 100 90" />
+                <path class="draw-path" pathLength="100" d="M100 150 C100 150 125 112 115 76 C108 56 100 62 100 90" />
+                <path class="draw-path" pathLength="100" d="M100 150 C100 150 92 100 100 65 C108 100 100 150 100 150 Z" />
+                <line class="draw-path" pathLength="100" x1="100" y1="150" x2="100" y2="158" />
+            </svg>
+            <h1>กำหนดการ</h1>
+            <p>และขั้นตอนการเข้าร่วมงานทำบุญอาจารย์ใหญ่ ประจำปี 2568</p>
 
-            <!-- Timeline Item 1: Registration -->
-            <div class="relative md:flex md:items-center md:justify-start mb-12">
-                <!-- Mobile Time Circle -->
-                <div class="md:hidden absolute top-0 left-0 flex items-center justify-center w-20 h-20 bg-gray-700 rounded-full z-10 -ml-10">
-                    <h3 class="text-white font-bold text-lg">8.00</h3>
+            <!-- Decorative candle + incense smoke -->
+            <svg class="candle-decor" viewBox="0 0 42 84" aria-hidden="true">
+                <rect x="14" y="34" width="14" height="42" rx="2" fill="#e9d9b8" opacity=".9" />
+                <rect x="14" y="34" width="14" height="6" fill="#c9a24a" opacity=".9" />
+                <line x1="21" y1="34" x2="21" y2="24" stroke="#c9a24a" stroke-width="1.4" />
+                <path class="candle-flame" d="M21 6 C26 12 26 18 21 24 C16 18 16 12 21 6 Z" fill="#ffd76a" />
+                <path class="candle-flame" d="M21 11 C23.5 14.5 23.5 17.5 21 20.5 C18.5 17.5 18.5 14.5 21 11 Z" fill="#ff9a3d" opacity=".85" />
+                <path class="smoke-wisp" d="M4 30 C 0 24, 8 18, 4 10" />
+                <path class="smoke-wisp" d="M8 32 C 4 26, 12 20, 8 12" />
+                <path class="smoke-wisp" d="M0 34 C -4 28, 4 22, 0 14" />
+            </svg>
+        </section>
+
+        <div class="container mx-auto px-4 pb-12 relative">
+
+            <!-- Timeline Container -->
+            <div class="relative timeline-container p-4" id="timelineContainer">
+
+                <!-- Animated center line -->
+                <div class="timeline-line-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 6 100" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="goldLineGradient" gradientUnits="userSpaceOnUse" x1="3" y1="0" x2="3" y2="100">
+                                <stop offset="0%" stop-color="#8a6d1d" />
+                                <stop offset="50%" stop-color="#ffe9a8" />
+                                <stop offset="100%" stop-color="#8a6d1d" />
+                            </linearGradient>
+                        </defs>
+                        <path id="timelinePath" pathLength="1000" d="M3 0 L3 100" />
+                    </svg>
                 </div>
-                <!-- Content: Adjusted padding for better responsive layout -->
-                <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-8">
-                     <div class="bg-white rounded-lg shadow-xl px-6 py-4">
-                        <h3 class="font-bold text-gray-800 text-xl">ลงทะเบียนเข้าร่วมงาน</h3>
-                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">นำ Qrcode ที่ได้รับจากหนังสือเชิญ แสดงให้นักศึกษาที่จุดลงทะเบียนเข้าร่วมงาน</p>
-                        <div class="swiper timeline-swiper">
-                            <div class="swiper-wrapper">
-                                <!-- Updated image paths to local files -->
-                                <div class="swiper-slide cursor-pointer"><img src="./images/regis.jpg" alt="นำ Qrcode มาวันงานเพื่อลงทะเบียน"></div>
-                                <div class="swiper-slide cursor-pointer"><img src="./images/qr.png" alt="นำ Qrcode มาวันงานเพื่อลงทะเบียน"></div>
-                                <div class="swiper-slide cursor-pointer"><img src="./images/registration-1.jpg" alt="ภาพลงทะเบียน 1"></div>
-                                <div class="swiper-slide cursor-pointer"><img src="./images/registration-2.jpg" alt="ภาพลงทะเบียน 2"></div>
-                                <div class="swiper-slide cursor-pointer"><img src="./images/registration-3.jpg" alt="ภาพลงทะเบียน 3"></div>
+
+                <!-- Timeline Item 1: Registration -->
+                <div class="relative md:flex md:items-center md:justify-start mb-12 timeline-item">
+                    <div class="md:hidden step-ring absolute top-0 left-0 flex items-center justify-center w-20 h-20 -ml-10">
+                        <span class="ring-numeral text-2xl">๑</span>
+                        <span class="ring-time text-[10px]">8:00 น.</span>
+                    </div>
+                    <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-8">
+                        <div class="timeline-card rounded-lg shadow-xl px-6 py-4 timeline-card">
+                            <div class="flex items-start gap-3 mb-1">
+                                <svg class="step-icon" viewBox="0 0 48 48" aria-hidden="true">
+                                    <rect class="draw-path" pathLength="100" x="5" y="11" width="38" height="26" rx="3" />
+                                    <rect class="draw-path" pathLength="100" x="10" y="16" width="10" height="10" rx="1" />
+                                    <line class="draw-path" pathLength="100" x1="25" y1="18" x2="38" y2="18" />
+                                    <line class="draw-path" pathLength="100" x1="25" y1="24" x2="38" y2="24" />
+                                    <line class="draw-path" pathLength="100" x1="10" y1="31" x2="30" y2="31" />
+                                </svg>
+                                <div>
+                                    <span class="step-time-chip mb-1">8:00 น.</span>
+                                    <h3 class="font-bold text-gray-800 text-xl">ลงทะเบียนเข้าร่วมงาน</h3>
+                                </div>
                             </div>
-                            <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
+                            <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">นำ Qrcode ที่ได้รับจากหนังสือเชิญ แสดงให้นักศึกษาที่จุดลงทะเบียนเข้าร่วมงาน</p>
+                            <div class="swiper timeline-swiper">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide cursor-pointer"><img src="./images/regis.jpg" alt="นำ Qrcode มาวันงานเพื่อลงทะเบียน"></div>
+                                    <div class="swiper-slide cursor-pointer"><img src="./images/qr.png" alt="นำ Qrcode มาวันงานเพื่อลงทะเบียน"></div>
+                                    <div class="swiper-slide cursor-pointer"><img src="./images/registration-1.jpg" alt="ภาพลงทะเบียน 1"></div>
+                                    <div class="swiper-slide cursor-pointer"><img src="./images/registration-2.jpg" alt="ภาพลงทะเบียน 2"></div>
+                                    <div class="swiper-slide cursor-pointer"><img src="./images/registration-3.jpg" alt="ภาพลงทะเบียน 3"></div>
+                                </div>
+                                <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
+                            </div>
                         </div>
                     </div>
+                    <div class="hidden md:flex step-ring absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24">
+                        <span class="ring-numeral text-3xl">๑</span>
+                        <span class="ring-time text-xs">8:00 น.</span>
+                    </div>
+                    <div class="md:w-1/2"></div>
                 </div>
-                <!-- Desktop Time Circle -->
-                <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24 bg-gray-700 rounded-full z-10">
-                     <h3 class="text-white font-bold text-xl">8.00</h3>
-                </div>
-                <div class="md:w-1/2"></div>
-            </div>
 
-            <!-- Timeline Item 2: Pay Respects -->
-            <div class="relative md:flex md:items-center md:justify-end mb-12">
-                 <!-- Mobile Time Circle -->
-                <div class="md:hidden absolute top-0 left-0 flex items-center justify-center w-20 h-20 bg-gray-700 rounded-full z-10 -ml-10">
-                    <h3 class="text-white font-bold text-lg">8.15</h3>
-                </div>
-                <div class="md:w-1/2"></div>
-                <!-- Content: Adjusted padding for better responsive layout -->
-                <div class="w-full md:w-1/2 pl-12 md:pl-8">
-                     <div class="bg-white rounded-lg shadow-xl px-6 py-4">
-                        <h3 class="font-bold text-gray-800 text-xl">ไหว้อาจารย์ใหญ่</h3>
-                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">จะมีนักศึกษานำญาติไปที่ห้องเรียนแลปกรอสชั้น 4 เพื่อแสดงความเคารพและรำลึกถึงพระคุณ</p>
-                        <div class="swiper timeline-swiper">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide cursor-pointer"><img src="./images/respect1.jpg" alt="ภาพบรรยากาศไหว้อาจารย์ใหญ่ 1"></div>
-                                <div class="swiper-slide cursor-pointer"><img src="./images/respect2.jpg" alt="ภาพบรรยากาศไหว้อาจารย์ใหญ่ 2"></div>
-                                <div class="swiper-slide cursor-pointer"><img src="./images/respect3.jpg" alt="ภาพบรรยากาศไหว้อาจารย์ใหญ่ 2"></div>
+                <!-- Timeline Item 2: Pay Respects -->
+                <div class="relative md:flex md:items-center md:justify-end mb-12 timeline-item">
+                    <div class="md:hidden step-ring absolute top-0 left-0 flex items-center justify-center w-20 h-20 -ml-10">
+                        <span class="ring-numeral text-2xl">๒</span>
+                        <span class="ring-time text-[10px]">8:15 น.</span>
+                    </div>
+                    <div class="md:w-1/2"></div>
+                    <div class="w-full md:w-1/2 pl-12 md:pl-8">
+                        <div class="timeline-card rounded-lg shadow-xl px-6 py-4">
+                            <div class="flex items-start gap-3 mb-1">
+                                <svg class="step-icon" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path class="draw-path" pathLength="100" d="M24 8 C20 15 16 21 16 29 C16 35 19 39 24 41" />
+                                    <path class="draw-path" pathLength="100" d="M24 8 C28 15 32 21 32 29 C32 35 29 39 24 41" />
+                                    <path class="draw-path" pathLength="100" d="M24 5 L24 9" />
+                                </svg>
+                                <div>
+                                    <span class="step-time-chip mb-1">8:15 น.</span>
+                                    <h3 class="font-bold text-gray-800 text-xl">ไหว้อาจารย์ใหญ่</h3>
+                                </div>
                             </div>
-                            <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
+                            <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">จะมีนักศึกษานำญาติไปที่ห้องเรียนแลปกรอสชั้น 4 เพื่อแสดงความเคารพและรำลึกถึงพระคุณ</p>
+                            <div class="swiper timeline-swiper">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide cursor-pointer"><img src="./images/respect1.jpg" alt="ภาพบรรยากาศไหว้อาจารย์ใหญ่ 1"></div>
+                                    <div class="swiper-slide cursor-pointer"><img src="./images/respect2.jpg" alt="ภาพบรรยากาศไหว้อาจารย์ใหญ่ 2"></div>
+                                    <div class="swiper-slide cursor-pointer"><img src="./images/respect3.jpg" alt="ภาพบรรยากาศไหว้อาจารย์ใหญ่ 2"></div>
+                                </div>
+                                <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
+                            </div>
                         </div>
                     </div>
+                    <div class="hidden md:flex step-ring absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24">
+                        <span class="ring-numeral text-3xl">๒</span>
+                        <span class="ring-time text-xs">8:15 น.</span>
+                    </div>
                 </div>
-                <!-- Desktop Time Circle -->
-                <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24 bg-gray-700 rounded-full z-10">
-                     <h3 class="text-white font-bold text-xl">8.15</h3>
-                </div>
-            </div>
 
-            <!-- Timeline Item 3: Monk Ceremony -->
-             <div class="relative md:flex md:items-center md:justify-start mb-12">
-                <!-- Mobile Time Circle -->
-                <div class="md:hidden absolute top-0 left-0 flex items-center justify-center w-20 h-20 bg-gray-700 rounded-full z-10 -ml-10">
-                    <h3 class="text-white font-bold text-lg">10.00</h3>
-                </div>
-                <!-- Content: Adjusted padding for better responsive layout -->
-                <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-8">
-                     <div class="bg-white rounded-lg shadow-xl px-6 py-4">
-                        <h3 class="font-bold text-gray-800 text-xl">พิธีสงฆ์</h3>
-                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">ประกอบพิธีทางศาสนา ณ ห้องประชุมราชปนัดดาสิรินธร (อาจารย์และนักศึกษา ที่ชั้น 1) (ญาติที่ชั้นลอย)</p>
-                        <div class="swiper timeline-swiper">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide cursor-pointer"><img src="./images/monk-ceremony-1.jpg" alt="ภาพพิธีสงฆ์ 1"></div>
-                                <div class="swiper-slide cursor-pointer"><img src="./images/monk-ceremony-2.jpg" alt="ภาพพิธีสงฆ์ 2"></div>
-                                <div class="swiper-slide cursor-pointer"><img src="./images/monk-ceremony-3.jpg" alt="ภาพพิธีสงฆ์ 3"></div>
+                <!-- Timeline Item 3: Monk Ceremony -->
+                <div class="relative md:flex md:items-center md:justify-start mb-12 timeline-item">
+                    <div class="md:hidden step-ring absolute top-0 left-0 flex items-center justify-center w-20 h-20 -ml-10">
+                        <span class="ring-numeral text-2xl">๓</span>
+                        <span class="ring-time text-[10px]">10:00 น.</span>
+                    </div>
+                    <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-8">
+                        <div class="timeline-card rounded-lg shadow-xl px-6 py-4">
+                            <div class="flex items-start gap-3 mb-1">
+                                <svg class="step-icon" viewBox="0 0 48 48" aria-hidden="true">
+                                    <circle class="draw-path" pathLength="100" cx="24" cy="24" r="15" />
+                                    <circle class="draw-path" pathLength="100" cx="24" cy="24" r="3" />
+                                    <line class="draw-path" pathLength="100" x1="24" y1="9" x2="24" y2="39" />
+                                    <line class="draw-path" pathLength="100" x1="9" y1="24" x2="39" y2="24" />
+                                    <line class="draw-path" pathLength="100" x1="13.6" y1="13.6" x2="34.4" y2="34.4" />
+                                    <line class="draw-path" pathLength="100" x1="13.6" y1="34.4" x2="34.4" y2="13.6" />
+                                </svg>
+                                <div>
+                                    <span class="step-time-chip mb-1">10:00 น.</span>
+                                    <h3 class="font-bold text-gray-800 text-xl">พิธีสงฆ์</h3>
+                                </div>
                             </div>
-                            <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
+                            <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">ประกอบพิธีทางศาสนา ณ ห้องประชุมราชปนัดดาสิรินธร (อาจารย์และนักศึกษา ที่ชั้น 1) (ญาติที่ชั้นลอย)</p>
+                            <div class="swiper timeline-swiper">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide cursor-pointer"><img src="./images/monk-ceremony-1.jpg" alt="ภาพพิธีสงฆ์ 1"></div>
+                                    <div class="swiper-slide cursor-pointer"><img src="./images/monk-ceremony-2.jpg" alt="ภาพพิธีสงฆ์ 2"></div>
+                                    <div class="swiper-slide cursor-pointer"><img src="./images/monk-ceremony-3.jpg" alt="ภาพพิธีสงฆ์ 3"></div>
+                                </div>
+                                <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
+                            </div>
                         </div>
                     </div>
+                    <div class="hidden md:flex step-ring absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24">
+                        <span class="ring-numeral text-3xl">๓</span>
+                        <span class="ring-time text-xs">10:00 น.</span>
+                    </div>
+                    <div class="md:w-1/2"></div>
                 </div>
-                <!-- Desktop Time Circle -->
-                <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24 bg-gray-700 rounded-full z-10">
-                     <h3 class="text-white font-bold text-xl">10.00</h3>
-                </div>
-                <div class="md:w-1/2"></div>
-            </div>
 
-            <!-- Timeline Item 4: Lunch Offering -->
-            <div class="relative md:flex md:items-center md:justify-end mb-12">
-                 <!-- Mobile Time Circle -->
-                <div class="md:hidden absolute top-0 left-0 flex items-center justify-center w-20 h-20 bg-gray-700 rounded-full z-10 -ml-10">
-                    <h3 class="text-white font-bold text-lg">11.00</h3>
-                </div>
-                <div class="md:w-1/2"></div>
-                <!-- Content: Adjusted padding for better responsive layout -->
-                <div class="w-full md:w-1/2 pl-12 md:pl-8">
-                     <div class="bg-white rounded-lg shadow-xl px-6 py-4">
-                        <h3 class="font-bold text-gray-800 text-xl">ถวายภัตตาหารเพล</h3>
-                        <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">ถวายภัตตาหารเพลแด่พระภิกษุสงฆ์ ที่อาคารศรีสวรินทิรา ชั้น 8 (ระหว่างนี้ให้นักศึกษาและญาติรอ)</p>
-                        <div class="swiper timeline-swiper">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide cursor-pointer"><img src="./images/lunch-offering-1.jpg" alt="ภาพถวายภัตตาหาร 1"></div>
-                                <div class="swiper-slide cursor-pointer"><img src="./images/lunch-offering-2.jpg" alt="ภาพถวายภัตตาหาร 2"></div>
-                                <div class="swiper-slide cursor-pointer"><img src="./images/lunch-offering-1.jpg" alt="ภาพถวายภัตตาหาร 3"></div>
+                <!-- Timeline Item 4: Lunch Offering -->
+                <div class="relative md:flex md:items-center md:justify-end mb-12 timeline-item">
+                    <div class="md:hidden step-ring absolute top-0 left-0 flex items-center justify-center w-20 h-20 -ml-10">
+                        <span class="ring-numeral text-2xl">๔</span>
+                        <span class="ring-time text-[10px]">11:00 น.</span>
+                    </div>
+                    <div class="md:w-1/2"></div>
+                    <div class="w-full md:w-1/2 pl-12 md:pl-8">
+                        <div class="timeline-card rounded-lg shadow-xl px-6 py-4">
+                            <div class="flex items-start gap-3 mb-1">
+                                <svg class="step-icon" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path class="draw-path" pathLength="100" d="M10 26 C10 34 16 39 24 39 C32 39 38 34 38 26" />
+                                    <line class="draw-path" pathLength="100" x1="8" y1="26" x2="40" y2="26" />
+                                    <path class="draw-path" pathLength="100" d="M19 20 C17 17 20 15 18 12" />
+                                    <path class="draw-path" pathLength="100" d="M24 20 C22 17 25 15 23 12" />
+                                    <path class="draw-path" pathLength="100" d="M29 20 C27 17 30 15 28 12" />
+                                </svg>
+                                <div>
+                                    <span class="step-time-chip mb-1">11:00 น.</span>
+                                    <h3 class="font-bold text-gray-800 text-xl">ถวายภัตตาหารเพล</h3>
+                                </div>
                             </div>
-                            <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
+                            <p class="text-sm leading-snug tracking-wide text-gray-600 mb-4">ถวายภัตตาหารเพลแด่พระภิกษุสงฆ์ ที่อาคารศรีสวรินทิรา ชั้น 8 (ระหว่างนี้ให้นักศึกษาและญาติรอ)</p>
+                            <div class="swiper timeline-swiper">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide cursor-pointer"><img src="./images/lunch-offering-1.jpg" alt="ภาพถวายภัตตาหาร 1"></div>
+                                    <div class="swiper-slide cursor-pointer"><img src="./images/lunch-offering-2.jpg" alt="ภาพถวายภัตตาหาร 2"></div>
+                                    <div class="swiper-slide cursor-pointer"><img src="./images/lunch-offering-1.jpg" alt="ภาพถวายภัตตาหาร 3"></div>
+                                </div>
+                                <div class="swiper-button-next text-white"></div><div class="swiper-button-prev text-white"></div><div class="swiper-pagination"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Desktop Time Circle -->
-                <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24 bg-gray-700 rounded-full z-10">
-                     <h3 class="text-white font-bold text-xl">11.00</h3>
-                </div>
-            </div>
-
-            <!-- Timeline Item 5: End of Ceremony -->
-            <div class="relative md:flex md:items-center md:justify-start">
-                <!-- Mobile Time Circle -->
-                <div class="md:hidden absolute top-0 left-0 flex items-center justify-center w-20 h-20 bg-green-600 rounded-full z-10 -ml-10">
-                    <h3 class="text-white font-bold text-lg">12.00</h3>
-                </div>
-                <!-- Content: Adjusted padding for better responsive layout -->
-                <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-8">
-                     <div class="bg-green-100 rounded-lg shadow-xl px-6 py-4">
-                        <h3 class="font-bold text-green-800 text-xl">เสร็จพิธี</h3>
-                        <p class="text-sm leading-snug tracking-wide text-green-700">เสร็จสิ้นพิธีการทั้งหมด</p>
+                    <div class="hidden md:flex step-ring absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24">
+                        <span class="ring-numeral text-3xl">๔</span>
+                        <span class="ring-time text-xs">11:00 น.</span>
                     </div>
                 </div>
-                <!-- Desktop Time Circle -->
-                <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24 bg-green-600 rounded-full z-10">
-                     <h3 class="text-white font-bold text-xl">12.00</h3>
-                </div>
-                <div class="md:w-1/2"></div>
-            </div>
 
+                <!-- Timeline Item 5: ถวายเครื่องไทยทาน (placeholder time/copy — edit as needed) -->
+                <div class="relative md:flex md:items-center md:justify-start mb-12 timeline-item">
+                    <div class="md:hidden step-ring absolute top-0 left-0 flex items-center justify-center w-20 h-20 -ml-10">
+                        <span class="ring-numeral text-2xl">๕</span>
+                        <span class="ring-time text-[10px]">11:30 น.</span>
+                    </div>
+                    <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-8">
+                        <div class="timeline-card rounded-lg shadow-xl px-6 py-4">
+                            <div class="flex items-start gap-3 mb-1">
+                                <svg class="step-icon" viewBox="0 0 48 48" aria-hidden="true">
+                                    <ellipse class="draw-path" pathLength="100" cx="24" cy="34" rx="16" ry="4" />
+                                    <rect class="draw-path" pathLength="100" x="16" y="18" width="16" height="12" rx="1" />
+                                    <line class="draw-path" pathLength="100" x1="24" y1="18" x2="24" y2="30" />
+                                    <line class="draw-path" pathLength="100" x1="16" y1="24" x2="32" y2="24" />
+                                    <path class="draw-path" pathLength="100" d="M20 18 C20 14 28 14 28 18" />
+                                </svg>
+                                <div>
+                                    <span class="step-time-chip mb-1">11:30 น.</span>
+                                    <h3 class="font-bold text-gray-800 text-xl">ถวายเครื่องไทยทาน</h3>
+                                </div>
+                            </div>
+                            <p class="text-sm leading-snug tracking-wide text-gray-600">ถวายเครื่องไทยทานแด่พระภิกษุสงฆ์ ณ อาคารศรีสวรินทิรา ชั้น 8 เพื่อความเป็นสิริมงคลแก่ครอบครัว</p>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex step-ring absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24">
+                        <span class="ring-numeral text-3xl">๕</span>
+                        <span class="ring-time text-xs">11:30 น.</span>
+                    </div>
+                    <div class="md:w-1/2"></div>
+                </div>
+
+                <!-- Timeline Item 6: End of Ceremony -->
+                <div class="relative md:flex md:items-center md:justify-end timeline-item">
+                    <div class="md:hidden step-ring absolute top-0 left-0 flex items-center justify-center w-20 h-20 -ml-10">
+                        <span class="ring-numeral text-2xl">๖</span>
+                        <span class="ring-time text-[10px]">12:00 น.</span>
+                    </div>
+                    <div class="md:w-1/2"></div>
+                    <div class="w-full md:w-1/2 pl-12 md:pl-8">
+                        <div class="timeline-card timeline-card--final rounded-lg shadow-xl px-6 py-4">
+                            <div class="flex items-start gap-3 mb-1">
+                                <svg class="step-icon" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path class="draw-path" pathLength="100" d="M24 36 C24 36 12 30 12 20 C12 14 18 12 24 20 C30 12 36 14 36 20 C36 30 24 36 24 36 Z" />
+                                    <path class="draw-path" pathLength="100" d="M24 36 C24 36 17 26 24 16 C31 26 24 36 24 36 Z" />
+                                    <line class="draw-path" pathLength="100" x1="24" y1="36" x2="24" y2="42" />
+                                </svg>
+                                <div>
+                                    <span class="step-time-chip mb-1">12:00 น.</span>
+                                    <h3 class="font-bold text-gray-800 text-xl">เสร็จพิธี</h3>
+                                </div>
+                            </div>
+                            <p class="text-sm leading-snug tracking-wide text-gray-600">เสร็จสิ้นพิธีการทั้งหมด</p>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex step-ring absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center w-24 h-24">
+                        <span class="ring-numeral text-3xl">๖</span>
+                        <span class="ring-time text-xs">12:00 น.</span>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 
@@ -330,10 +553,129 @@
         </div>
     </div>
 
+    <!-- WebGL gold ember/particle background -->
+    <script type="module">
+        import * as THREE from 'three';
+
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const canvas = document.getElementById('goldParticles');
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.z = 20;
+
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const COUNT = isMobile ? 220 : 650;
+        const RANGE_Y = 26;
+        const positions = new Float32Array(COUNT * 3);
+        const speeds = new Float32Array(COUNT);
+        const phases = new Float32Array(COUNT);
+        const sizes = new Float32Array(COUNT);
+
+        for (let i = 0; i < COUNT; i++) {
+            positions[i * 3 + 0] = (Math.random() - 0.5) * 30;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * RANGE_Y;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 18;
+            speeds[i] = 0.4 + Math.random() * 1.2;
+            phases[i] = Math.random() * Math.PI * 2;
+            sizes[i] = 6 + Math.random() * 22;
+        }
+
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('aSpeed', new THREE.BufferAttribute(speeds, 1));
+        geometry.setAttribute('aPhase', new THREE.BufferAttribute(phases, 1));
+        geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
+
+        const material = new THREE.ShaderMaterial({
+            uniforms: {
+                uTime: { value: 0 },
+                uScroll: { value: 0 },
+                uRangeY: { value: RANGE_Y },
+                uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+            },
+            vertexShader: `
+                attribute float aSpeed;
+                attribute float aPhase;
+                attribute float aSize;
+                uniform float uTime;
+                uniform float uScroll;
+                uniform float uRangeY;
+                uniform float uPixelRatio;
+                varying float vPhase;
+                varying float vSpeed;
+                void main() {
+                    vPhase = aPhase;
+                    vSpeed = aSpeed;
+                    float travel = uTime * aSpeed * 0.6 + uScroll * 4.0;
+                    float y = mod(position.y + travel + uRangeY * 0.5, uRangeY) - uRangeY * 0.5;
+                    float sway = sin(uTime * 0.6 + aPhase) * 0.6;
+                    vec3 finalPos = vec3(position.x + sway, y, position.z);
+                    vec4 mvPosition = modelViewMatrix * vec4(finalPos, 1.0);
+                    gl_PointSize = aSize * uPixelRatio * (18.0 / -mvPosition.z);
+                    gl_Position = projectionMatrix * mvPosition;
+                }
+            `,
+            fragmentShader: `
+                uniform float uTime;
+                varying float vPhase;
+                varying float vSpeed;
+                void main() {
+                    vec2 c = gl_PointCoord - 0.5;
+                    float d = length(c);
+                    if (d > 0.5) discard;
+                    float glow = smoothstep(0.5, 0.0, d);
+                    float twinkle = 0.55 + 0.45 * sin(uTime * (1.5 + vSpeed) + vPhase * 6.2831);
+                    vec3 gold = mix(vec3(0.65, 0.42, 0.09), vec3(1.0, 0.87, 0.55), twinkle);
+                    float alpha = glow * (0.35 + 0.65 * twinkle);
+                    gl_FragColor = vec4(gold, alpha);
+                }
+            `,
+            transparent: true,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending,
+        });
+
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
+
+        let scrollProgress = 0;
+        function updateScroll() {
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            scrollProgress = max > 0 ? window.scrollY / max : 0;
+        }
+        window.addEventListener('scroll', updateScroll, { passive: true });
+        updateScroll();
+
+        function onResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            material.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
+        }
+        window.addEventListener('resize', onResize);
+
+        const clock = new THREE.Clock();
+        function tick() {
+            material.uniforms.uTime.value = clock.getElapsedTime();
+            material.uniforms.uScroll.value = scrollProgress;
+            renderer.render(scene, camera);
+            if (!prefersReducedMotion) requestAnimationFrame(tick);
+        }
+        if (prefersReducedMotion) {
+            renderer.render(scene, camera);
+        } else {
+            requestAnimationFrame(tick);
+        }
+    </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // --- Initialize Timeline Swipers ---
-            // A more efficient way to initialize all timeline swipers
             document.querySelectorAll('.timeline-swiper').forEach(swiperContainer => {
                 new Swiper(swiperContainer, {
                     loop: true,
@@ -356,7 +698,6 @@
             const body = document.body;
             let modalSwiper = null;
 
-            // --- Caption Update Function ---
             const updateCaption = (swiper) => {
                 const activeSlide = swiper.slides[swiper.activeIndex];
                 if (!activeSlide) return;
@@ -371,23 +712,20 @@
                 }
             };
 
-            // --- Modal Open/Close Functions ---
             const openModal = () => {
                 imageModal.classList.remove('opacity-0', 'pointer-events-none');
-                body.classList.add('overflow-hidden'); // Prevent background scroll
+                body.classList.add('overflow-hidden');
             };
 
             const closeModal = () => {
-                // Check if modal is already closed to prevent unnecessary actions
                 if (imageModal.classList.contains('pointer-events-none')) {
                     return;
                 }
                 imageModal.classList.add('opacity-0', 'pointer-events-none');
-                modalCaption.classList.add('opacity-0'); // Hide caption on close
-                body.classList.remove('overflow-hidden'); // Restore background scroll
+                modalCaption.classList.add('opacity-0');
+                body.classList.remove('overflow-hidden');
             };
 
-            // Add click listeners to all slides in timeline swipers
             document.querySelectorAll('.timeline-swiper .swiper-slide').forEach((slide) => {
                 slide.addEventListener('click', () => {
                     const parentSwiperWrapper = slide.closest('.swiper-wrapper');
@@ -397,11 +735,8 @@
                     }));
                     const clickedIndex = Array.from(parentSwiperWrapper.children).indexOf(slide.closest('.swiper-slide'));
 
-                    // Populate modal swiper
                     modalSwiperWrapper.innerHTML = slidesData.map(data => `<div class="swiper-slide"><img src="${data.src}" alt="${data.alt || ''}"></div>`).join('');
-                    
-                    // Initialize the swiper on first click, or update it on subsequent clicks.
-                    // This prevents the "loop" warning on page load.
+
                     if (!modalSwiper) {
                         modalSwiper = new Swiper('.modal-swiper', {
                             loop: true,
@@ -412,27 +747,85 @@
                             navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
                         });
                     }
-                    
-                    // Update the swiper instance with the new slides and go to the correct one.
+
                     modalSwiper.update();
                     modalSwiper.slideToLoop(clickedIndex, 0, false);
-                    updateCaption(modalSwiper); // Set initial caption
+                    updateCaption(modalSwiper);
                     openModal();
                 });
             });
 
-            // Close modal functionality
             closeModalBtn.addEventListener('click', closeModal);
             imageModal.addEventListener('click', (e) => {
-                if (e.target === imageModal) { // Only close if clicking on the background
+                if (e.target === imageModal) {
                     closeModal();
                 }
             });
 
-            // Add keyboard listener for 'Escape' key to close the modal
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     closeModal();
+                }
+            });
+
+            // --- GSAP ScrollTrigger: gold line draw, alternating slide-in, self-drawing icons, hero lotus ---
+            gsap.registerPlugin(ScrollTrigger);
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            const heroLotusPaths = document.querySelectorAll('.hero-lotus .draw-path');
+            if (prefersReducedMotion) {
+                gsap.set(heroLotusPaths, { strokeDashoffset: 0 });
+            } else {
+                gsap.fromTo(heroLotusPaths, { strokeDashoffset: 100 }, {
+                    strokeDashoffset: 0,
+                    duration: 1.8,
+                    ease: 'power2.inOut',
+                    stagger: 0.12,
+                    delay: 0.3,
+                });
+            }
+
+            const linePath = document.getElementById('timelinePath');
+            if (linePath) {
+                if (prefersReducedMotion) {
+                    gsap.set(linePath, { strokeDashoffset: 0 });
+                } else {
+                    gsap.fromTo(linePath, { strokeDashoffset: 1000 }, {
+                        strokeDashoffset: 0,
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: '#timelineContainer',
+                            start: 'top 75%',
+                            end: 'bottom 70%',
+                            scrub: 0.6,
+                        },
+                    });
+                }
+            }
+
+            document.querySelectorAll('.timeline-item').forEach((item, i) => {
+                const card = item.querySelector('.timeline-card');
+                const iconPaths = item.querySelectorAll('.step-icon .draw-path');
+                const fromX = i % 2 === 0 ? -60 : 60;
+
+                if (prefersReducedMotion) {
+                    gsap.set(card, { opacity: 1, x: 0 });
+                    gsap.set(iconPaths, { strokeDashoffset: 0 });
+                } else {
+                    gsap.fromTo(card, { opacity: 0, x: fromX }, {
+                        opacity: 1,
+                        x: 0,
+                        duration: 0.9,
+                        ease: 'power3.out',
+                        scrollTrigger: { trigger: item, start: 'top 82%', toggleActions: 'play none none reverse' },
+                    });
+                    gsap.fromTo(iconPaths, { strokeDashoffset: 100 }, {
+                        strokeDashoffset: 0,
+                        duration: 1.1,
+                        ease: 'power2.inOut',
+                        stagger: 0.08,
+                        scrollTrigger: { trigger: item, start: 'top 78%', toggleActions: 'play none none none' },
+                    });
                 }
             });
         });
