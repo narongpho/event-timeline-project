@@ -169,18 +169,21 @@
             margin: 0 auto;
             padding: 0 1.5rem 3rem;
         }
-        .parking-heading {
+        .parking-heading,
+        .schedule-heading {
             text-align: center;
             margin-bottom: 1.75rem;
         }
-        .parking-heading h2 {
+        .parking-heading h2,
+        .schedule-heading h2 {
             font-weight: 700;
             font-size: clamp(1.35rem, 3vw, 1.75rem);
             color: var(--gold-bright);
             text-shadow: 0 0 12px rgba(212, 175, 55, .4);
             margin-bottom: .35rem;
         }
-        .parking-heading p {
+        .parking-heading p,
+        .schedule-heading p {
             color: #e9d9b8;
             opacity: .85;
             font-size: .9rem;
@@ -261,7 +264,8 @@
         }
 
         .step-icon { width: 40px; height: 40px; color: #a97c1f; flex-shrink: 0; }
-        .parking-heading-icon {
+        .parking-heading-icon,
+        .schedule-heading-icon {
             width: 44px;
             height: 44px;
             margin: 0 auto .5rem;
@@ -421,6 +425,18 @@
         </section>
 
         <div class="container mx-auto px-4 pb-12 relative" id="panel-schedule" role="tabpanel" aria-labelledby="tab-schedule" hidden>
+
+            <div class="schedule-heading">
+                <svg class="step-icon schedule-heading-icon" viewBox="0 0 48 48" aria-hidden="true">
+                    <circle class="draw-path" pathLength="100" cx="24" cy="27" r="16" />
+                    <line class="draw-path" pathLength="100" x1="24" y1="27" x2="24" y2="17" />
+                    <line class="draw-path" pathLength="100" x1="24" y1="27" x2="31" y2="31" />
+                    <line class="draw-path" pathLength="100" x1="16" y1="6" x2="20" y2="10.5" />
+                    <line class="draw-path" pathLength="100" x1="32" y1="6" x2="28" y2="10.5" />
+                </svg>
+                <h2>กำหนดการ</h2>
+                <p>และขั้นตอนการเข้าร่วมงานทำบุญอาจารย์ใหญ่ ประจำปี 2569</p>
+            </div>
 
             <!-- Timeline Container -->
             <div class="relative timeline-container p-4" id="timelineContainer">
@@ -914,6 +930,19 @@
                     ease: 'power2.inOut',
                     stagger: 0.06,
                     scrollTrigger: { trigger: '.parking-section', start: 'top 85%', toggleActions: 'play none none none' },
+                });
+            }
+
+            const scheduleHeadingIcon = document.querySelectorAll('.schedule-heading-icon .draw-path');
+            if (prefersReducedMotion) {
+                gsap.set(scheduleHeadingIcon, { strokeDashoffset: 0 });
+            } else {
+                gsap.fromTo(scheduleHeadingIcon, { strokeDashoffset: 100 }, {
+                    strokeDashoffset: 0,
+                    duration: 1.1,
+                    ease: 'power2.inOut',
+                    stagger: 0.06,
+                    scrollTrigger: { trigger: '.schedule-heading', start: 'top 85%', toggleActions: 'play none none none' },
                 });
             }
 
