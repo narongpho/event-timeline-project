@@ -32,7 +32,6 @@
         }
 
         html { scroll-behavior: smooth; }
-        @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
         body {
             font-family: 'Kanit', sans-serif;
@@ -42,9 +41,7 @@
             background-position: 50% 0%;
             overflow-x: hidden;
         }
-        @media (prefers-reduced-motion: no-preference) {
-            body { animation: bgDrift 40s ease-in-out infinite alternate; }
-        }
+        body { animation: bgDrift 40s ease-in-out infinite alternate; }
         @keyframes bgDrift {
             0% { background-position: 50% 0%; }
             100% { background-position: 50% 18%; }
@@ -104,10 +101,7 @@
         @media (max-width: 640px) {
             .candle-decor { position: static; margin: 1.25rem auto 0; }
         }
-        .candle-flame { transform-origin: 50% 100%; }
-        @media (prefers-reduced-motion: no-preference) {
-            .candle-flame { animation: flicker 2.6s ease-in-out infinite; }
-        }
+        .candle-flame { transform-origin: 50% 100%; animation: flicker 2.6s ease-in-out infinite; }
         @keyframes flicker {
             0%, 100% { transform: scaleY(1) scaleX(1) rotate(0deg); opacity: 1; }
             20% { transform: scaleY(1.1) scaleX(.93) rotate(-2deg); opacity: .9; }
@@ -121,11 +115,9 @@
             stroke-linecap: round;
             opacity: 0;
         }
-        @media (prefers-reduced-motion: no-preference) {
-            .smoke-wisp { animation: smokeRise 6s ease-in-out infinite; }
-            .smoke-wisp:nth-child(2) { animation-delay: 1.6s; }
-            .smoke-wisp:nth-child(3) { animation-delay: 3.2s; }
-        }
+        .smoke-wisp { animation: smokeRise 6s ease-in-out infinite; }
+        .smoke-wisp:nth-child(2) { animation-delay: 1.6s; }
+        .smoke-wisp:nth-child(3) { animation-delay: 3.2s; }
         @keyframes smokeRise {
             0% { transform: translateY(8px) scaleX(1); opacity: 0; }
             15% { opacity: .45; }
@@ -247,9 +239,7 @@
             border-radius: 9999px;
             border: 1.5px dashed rgba(212, 175, 55, .65);
         }
-        @media (prefers-reduced-motion: no-preference) {
-            .step-ring::before { animation: ringSpin 16s linear infinite; }
-        }
+        .step-ring::before { animation: ringSpin 16s linear infinite; }
         @keyframes ringSpin { to { transform: rotate(360deg); } }
         .ring-numeral { font-weight: 700; line-height: 1; color: var(--gold-bright); text-shadow: 0 0 10px rgba(212, 175, 55, .6); }
         .ring-time { color: #e9d9b8; opacity: .85; font-weight: 400; letter-spacing: .02em; }
@@ -715,7 +705,8 @@
         (function () {
             const FRAME_COUNT = 100;
             const FRAME_PATH = (i) => `./images/frames/bg-${String(i).padStart(3, '0')}.jpg`;
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            // Animations always play on this site regardless of the visitor's OS motion setting.
+            const prefersReducedMotion = false;
             const lerpFactor = prefersReducedMotion ? 1 : 0.07;
 
             const canvas = document.getElementById('sequenceCanvas');
@@ -887,7 +878,8 @@
 
             // --- GSAP ScrollTrigger: gold line draw, alternating slide-in, self-drawing icons, hero lotus ---
             gsap.registerPlugin(ScrollTrigger);
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            // Animations always play on this site regardless of the visitor's OS motion setting.
+            const prefersReducedMotion = false;
 
             const heroLotusPaths = document.querySelectorAll('.hero-lotus .draw-path');
             if (prefersReducedMotion) {
