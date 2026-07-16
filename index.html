@@ -163,21 +163,6 @@
             box-shadow: 0 4px 18px -4px rgba(212, 175, 55, .6);
         }
 
-        .schedule-heading {
-            text-align: center;
-            margin-bottom: 1.75rem;
-        }
-        .schedule-heading h2 {
-            font-weight: 700;
-            font-size: clamp(1.5rem, 4vw, 2.1rem);
-            background: linear-gradient(180deg, var(--gold-bright), var(--gold) 60%, var(--gold-deep));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: .35rem;
-        }
-        .schedule-heading p { color: #e9d9b8; opacity: .9; font-size: .95rem; }
-
         /* ---------- Parking ---------- */
         .parking-section {
             max-width: 960px;
@@ -367,7 +352,7 @@
                 <path class="draw-path" pathLength="100" d="M100 150 C100 150 92 100 100 65 C108 100 100 150 100 150 Z" />
                 <line class="draw-path" pathLength="100" x1="100" y1="150" x2="100" y2="158" />
             </svg>
-            <h1>กำหนดการ</h1>
+            <h1>ข้อมูลการเข้าร่วมงาน</h1>
             <p>และขั้นตอนการเข้าร่วมงานทำบุญอาจารย์ใหญ่ ประจำปี 2569</p>
 
             <!-- Decorative candle + incense smoke -->
@@ -436,11 +421,6 @@
         </section>
 
         <div class="container mx-auto px-4 pb-12 relative" id="panel-schedule" role="tabpanel" aria-labelledby="tab-schedule" hidden>
-
-            <div class="schedule-heading">
-                <h2>กำหนดการ</h2>
-                <p>และขั้นตอนการเข้าร่วมงานทำบุญอาจารย์ใหญ่ ประจำปี 2569</p>
-            </div>
 
             <!-- Timeline Container -->
             <div class="relative timeline-container p-4" id="timelineContainer">
