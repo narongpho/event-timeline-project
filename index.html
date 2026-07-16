@@ -133,6 +133,51 @@
             100% { transform: translateY(-38px) scaleX(.9); opacity: 0; }
         }
 
+        /* ---------- Tabs ---------- */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: .75rem;
+            padding: 0 1.5rem;
+            margin: 0 auto 2rem;
+            max-width: 640px;
+        }
+        .tab-btn {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 600;
+            font-size: .95rem;
+            color: #e9d9b8;
+            background: rgba(212, 175, 55, .08);
+            border: 1px solid rgba(212, 175, 55, .45);
+            border-radius: 9999px;
+            padding: .55rem 1.4rem;
+            cursor: pointer;
+            transition: background-color .25s ease, color .25s ease, box-shadow .25s ease;
+        }
+        .tab-btn:hover { background: rgba(212, 175, 55, .18); }
+        .tab-btn.is-active {
+            background: linear-gradient(160deg, var(--gold-bright), var(--gold));
+            border-color: var(--gold-bright);
+            color: #2a1608;
+            box-shadow: 0 4px 18px -4px rgba(212, 175, 55, .6);
+        }
+
+        .schedule-heading {
+            text-align: center;
+            margin-bottom: 1.75rem;
+        }
+        .schedule-heading h2 {
+            font-weight: 700;
+            font-size: clamp(1.5rem, 4vw, 2.1rem);
+            background: linear-gradient(180deg, var(--gold-bright), var(--gold) 60%, var(--gold-deep));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: .35rem;
+        }
+        .schedule-heading p { color: #e9d9b8; opacity: .9; font-size: .95rem; }
+
         /* ---------- Parking ---------- */
         .parking-section {
             max-width: 960px;
@@ -338,8 +383,14 @@
             </svg>
         </section>
 
+        <!-- Tab switcher -->
+        <div class="tabs" role="tablist" aria-label="เลือกข้อมูลที่ต้องการดู">
+            <button class="tab-btn is-active" type="button" role="tab" aria-selected="true" aria-controls="panel-parking" id="tab-parking" data-tab="parking">จุดจอดรถ &amp; รถรับส่ง</button>
+            <button class="tab-btn" type="button" role="tab" aria-selected="false" aria-controls="panel-schedule" id="tab-schedule" data-tab="schedule">กำหนดการ</button>
+        </div>
+
         <!-- Parking Information -->
-        <section class="parking-section">
+        <section class="parking-section" id="panel-parking" role="tabpanel" aria-labelledby="tab-parking">
             <div class="parking-heading">
                 <svg class="step-icon parking-heading-icon" viewBox="0 0 48 48" aria-hidden="true">
                     <rect class="draw-path" pathLength="100" x="4" y="20" width="40" height="16" rx="3" />
@@ -384,7 +435,12 @@
             </div>
         </section>
 
-        <div class="container mx-auto px-4 pb-12 relative">
+        <div class="container mx-auto px-4 pb-12 relative" id="panel-schedule" role="tabpanel" aria-labelledby="tab-schedule" hidden>
+
+            <div class="schedule-heading">
+                <h2>กำหนดการ</h2>
+                <p>และขั้นตอนการเข้าร่วมงานทำบุญอาจารย์ใหญ่ ประจำปี 2569</p>
+            </div>
 
             <!-- Timeline Container -->
             <div class="relative timeline-container p-4" id="timelineContainer">
@@ -930,6 +986,33 @@
                         scrollTrigger: { trigger: item, start: 'top 78%', toggleActions: 'play none none none' },
                     });
                 }
+            });
+
+            // --- Tab switcher: parking info vs. schedule ---
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabPanels = {
+                parking: document.getElementById('panel-parking'),
+                schedule: document.getElementById('panel-schedule'),
+            };
+            tabButtons.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const target = btn.dataset.tab;
+                    if (btn.classList.contains('is-active')) return;
+
+                    tabButtons.forEach((b) => {
+                        const active = b === btn;
+                        b.classList.toggle('is-active', active);
+                        b.setAttribute('aria-selected', active ? 'true' : 'false');
+                    });
+                    Object.entries(tabPanels).forEach(([key, panel]) => {
+                        if (panel) panel.hidden = key !== target;
+                    });
+
+                    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+                    // the newly-revealed panel was display:none when ScrollTrigger first measured it,
+                    // so its trigger positions need recalculating now that it has real layout
+                    requestAnimationFrame(() => ScrollTrigger.refresh());
+                });
             });
         });
     </script>
